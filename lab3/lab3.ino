@@ -4,7 +4,7 @@
 
 // Declare LCD object for software SPI
 // Adafruit_PCD8544(CLK,DIN,D/C,CE,RST);
-Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);
+Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 2);
 
 int rotatetext = 1;
 
