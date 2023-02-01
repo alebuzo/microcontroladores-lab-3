@@ -1,11 +1,9 @@
-//
-// Voltimetro_dc.ino
-// hispavila.com
-// Construcción de un voltímetro DC con Arduino
-// 20.09.2015
-// Utiliza el monitor Serial para mostrar los valores.
-//
- 
+//     Universidad de Costa Rica
+// Laboratorio de Microcontroladores
+// Laboratorio 3 - Voltímetro 4 canales
+// Estudiantes;  Raquel Corrales Marín B92378
+//               Alexa Carmona Buzo B91643        
+// Febrero 2022.
 
 #include <SPI.h>
 #include <Adafruit_GFX.h>
@@ -13,13 +11,12 @@
 
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 2);
 float v0 = 4.98; // valor real de la alimentacion de Arduino, Vcc
-float v1 = 18; // valor real de la alimentacion de Arduino, Vcc
-float v2 = 10.5; // valor real de la alimentacion de Arduino, Vcc
-float v3 = 3; // valor real de la alimentacion de Arduino, Vcc
 float r1 = 1000000; // 1M
 float r2 = 100000; // 100K
+int LED = 8; 
  
 void setup() {
+pinMode(LED, OUTPUT);
 Serial.begin(9600);
 display.begin();
 display.setContrast(57);
@@ -31,7 +28,7 @@ display.clearDisplay();
 Serial.println("--------------------");
 Serial.println("DC VOLTMETER");
 Serial.print("Maximum Voltage: ");
-Serial.print((int)(v1 / (r2 / (r1 + r2))));
+Serial.print((int)(v0 / (r2 / (r1 + r2))));
 Serial.println("V");
 Serial.println("--------------------");
 Serial.println(""); 
@@ -61,6 +58,20 @@ float v_3 = v_22 / (r2 / (r1 + r2));
 // A0 * 3
 float v_33 = (analogRead(0) * v0) / 1024.0;
 float v_4 = v_33 / (r2 / (r1 + r2));
+
+
+// Encender LED LÍMITE DE TENSIÓN
+if (v_1 < 20 &&  v_2 < 20  &&  v_3 < 20 && v_4 < 20)   
+  {  
+    digitalWrite(LED, LOW);  
+    delay(500);  
+  }  
+    
+  else   
+  {  
+    digitalWrite(LED, HIGH);  
+    delay(500);  
+  }  
  
 Serial.print("V1: ");
 Serial.println(v_1);
