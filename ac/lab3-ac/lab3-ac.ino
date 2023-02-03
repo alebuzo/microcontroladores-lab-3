@@ -10,7 +10,10 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
-
+#define LED1 0
+#define LED2 1
+#define LED3 8
+#define LED4 9
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 2);
 float v0 = 4.98; // valor real de la alimentacion de Arduino, Vcc
 float r1 = 100000; // 100k
@@ -25,6 +28,10 @@ pinMode(13, INPUT);
 pinMode(12, INPUT); 
 pinMode(11, INPUT);
 pinMode(10, INPUT);
+pinMode(LED1, OUTPUT);
+pinMode(LED2, OUTPUT); 
+pinMode(LED3, OUTPUT);
+pinMode(LED4, OUTPUT);
 
 Serial.begin(9600);
 display.begin();
@@ -88,8 +95,8 @@ void loop() {
 
   else{                                   //si el estado es no pulsado
 
-    float v_00 = max_v1*(1+r1/r2);
-      v_1 = v_00 ;   
+     float v = analogRead(5) *0.00488;
+      v_1 = v / (r2 / (r1 + r2));   
 
   }
 
@@ -102,8 +109,8 @@ void loop() {
 
   else{                                   //si el estado es no pulsado
 
-    float v_00 = max_v2*(1+r1/r2);
-      v_2 = v_00 ;   
+     float v = analogRead(4) *0.00488;
+      v_2 = v / (r2 / (r1 + r2));    
 
   }
 
@@ -117,8 +124,8 @@ void loop() {
 
   else{                                   //si el estado es no pulsado
 
-    float v_00 = max_v3*(1+r1/r2);
-      v_3 = v_00 ;    
+     float v = analogRead(3) *0.00488;
+      v_3 = v / (r2 / (r1 + r2));    
 
   }
 
@@ -132,12 +139,42 @@ void loop() {
 
   else{                                   //si el estado es no pulsado
 
-    float v_00 = max_v4*(1+r1/r2);
-      v_4 = v_00 ;    
+   
+
+      float v = analogRead(2) *0.00488;
+      v_4 = v / (r2 / (r1 + r2));    
 
   }
 
+// ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION 
 
+  if (20 < v_1 || v_1 < -20) {
+    digitalWrite(LED1, HIGH);
+  }
+  else {
+    digitalWrite(LED1, LOW);
+  }
+
+    if (20 < v_2 || v_2 < -20) {
+    digitalWrite(LED2, HIGH);
+  }
+  else {
+    digitalWrite(LED2, LOW);
+  }
+
+  if (20 < v_3 || v_3 < -20) {
+    digitalWrite(LED3, HIGH);
+  }
+  else {
+    digitalWrite(LED3, LOW);
+  }
+
+  if (20 < v_4 || 4 < -20) {
+    digitalWrite(LED4, HIGH);
+  }
+  else {
+    digitalWrite(LED4, LOW);
+  }
 
 
 
