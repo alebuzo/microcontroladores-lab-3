@@ -1,11 +1,9 @@
-//
-// Voltimetro_dc.ino
-// hispavila.com
-// Construcción de un voltímetro DC con Arduino
-// 20.09.2015
-// Utiliza el monitor Serial para mostrar los valores.
-//
- 
+//     Universidad de Costa Rica
+// Laboratorio de Microcontroladores
+// Laboratorio 3 - Voltimetro 4 canales 
+// Estudiantes;  Raquel Corrales Marín B92378
+//               Alexa Carmona Buzo B91643        
+// Febrero 2022.
 
 #include <SPI.h>
 #include <Adafruit_GFX.h>
@@ -22,8 +20,11 @@ float v_1 = 0;
 float v_2 = 0;
 float v_3 = 0;
 float v_4 = 0;
- 
+int serialPin = A0;
+int buttonState = 0;
+
 void setup() {
+pinMode(serialPin, INPUT);
 pinMode(13, INPUT);
 pinMode(12, INPUT); 
 pinMode(11, INPUT);
@@ -39,15 +40,9 @@ display.setContrast(57);
 display.clearDisplay();
 display.setTextSize(1);
 display.setTextColor(BLACK);
-display.setCursor(0,0);
 display.clearDisplay();
-Serial.println("--------------------");
-Serial.println("DC VOLTMETER");
-Serial.print("Maximum Voltage: ");
-Serial.print((int)(v0 / (r2 / (r1 + r2))));
-Serial.println("V");
-Serial.println("--------------------");
-Serial.println(""); 
+
+
 delay(2000);
 }
 
@@ -81,6 +76,10 @@ void loop() {
     if(max_v4 < r) max_v4 = r;
     delayMicroseconds(200);
   }
+
+  //--------------------------------------------------------------------
+  // Calculos e impresion en pantalla
+  //--------------------------------------------------------------------
   int interruptor1 = digitalRead(10);   //lee el estado del botón
   int interruptor2 = digitalRead(11);   //lee el estado del botón
   int interruptor3 = digitalRead(12);   //lee el estado del botón
@@ -90,28 +89,36 @@ void loop() {
 
     float v_00 = max_v1*0.00488*(1+r1/r2);
      v_1 = v_00 *0.7071+0.7; 
-
+    
+    display.print("V1 AC: ");
+    display.print(v_1);
+    display.print("V");
   }
-
   else{                                   //si el estado es no pulsado
 
      float v = analogRead(5) *0.00488;
-      v_1 = v / (r2 / (r1 + r2));   
-
+      v_1 = v / (r2 / (r1 + r2));;   
+      display.print("V1 DC: ");
+      display.print(v_1);
+      display.print("V");   
   }
 
   if(interruptor2==HIGH) {          //si el estado es pulsado
-
+    
      float v_00 = max_v2*0.00488*(1+r1/r2);
      v_2 = v_00 *0.7071+0.7;  
-
+    display.print("\n");
+    display.print("V2 AC: ");
+    display.print(v_2);
+    display.print("V");
   }
-
   else{                                   //si el estado es no pulsado
-
-     float v = analogRead(4) *0.00488;
-      v_2 = v / (r2 / (r1 + r2));    
-
+      float v = analogRead(4) *0.00488;
+      v_2 = v / (r2 / (r1 + r2));;     
+      display.print("\n");
+      display.print("V2 DC: ");
+      display.print(v_2);
+      display.print("V");
   }
 
 
@@ -119,14 +126,18 @@ void loop() {
 
      float v_00 = max_v3*0.00488*(1+r1/r2);
      v_3 = v_00 *0.7071+0.7;  
-
+    display.print("\n");
+    display.print("V3 AC: ");
+    display.print(v_3);
+    display.print("V");
   }
-
   else{                                   //si el estado es no pulsado
-
-     float v = analogRead(3) *0.00488;
-      v_3 = v / (r2 / (r1 + r2));    
-
+    float v = analogRead(3) *0.00488;
+      v_3 = v / (r2 / (r1 + r2));; 
+      display.print("\n");
+      display.print("V3 DC: ");
+      display.print(v_3);
+      display.print("V"); 
   }
 
 
@@ -134,79 +145,85 @@ void loop() {
 
     float v_00 = max_v4*0.00488*(1+r1/r2);
       v_4 = v_00 *0.7071+0.7; 
+      display.print("\n");
+      display.print("V4 AC: ");
+      display.print(v_4);
+      display.print("V");
+  }
+
+  else{                                   //si el estado es no pulsado
+    float v = analogRead(2) *0.00488;
+      v_4 = v / (r2 / (r1 + r2));;     
+    display.print("\n");
+    display.print("V4 DC: ");
+    display.print(v_4);
+    display.print("V");
+  }
+
+
+//--------------------------------------------------------------------
+// IMPRIMIR EN PANTALLA Y DATOS SERIALES AC/DC
+  //--------------------------------------------------------------------
+buttonState = digitalRead(serialPin);
+
+  if(buttonState==HIGH) {          //si el estado es pulsado
+
+    if(interruptor1==HIGH) {          //si el estado es pulsado
+
+      Serial.print("V1_AC: ");
+      Serial.println(v_1);
+
+    }
+
+    else{                                   //si el estado es no pulsado
+          Serial.print("V1_DC: ");
+          Serial.println(v_1);    
+    }
+    
+    if(interruptor2==HIGH) {          //si el estado es pulsado
+
+      Serial.print("V2_AC: ");
+      Serial.println(v_2);
+
+    }
+
+    else{                                   //si el estado es no pulsado
+          Serial.print("V2_DC: ");
+          Serial.println(v_2);    
+    }
+
+    if(interruptor3==HIGH) {          //si el estado es pulsado
+
+      Serial.print("V3_AC: ");
+      Serial.println(v_3);
+
+    }
+
+    else{                                   //si el estado es no pulsado
+          Serial.print("V3_DC: ");
+          Serial.println(v_3);    
+    }  
+    if(interruptor4==HIGH) {          //si el estado es pulsado
+
+      Serial.print("V4_AC: ");
+      Serial.println(v_4);
+
+    }
+
+    else{                                   //si el estado es no pulsado
+          Serial.print("V4_DC: ");
+          Serial.println(v_4);    
+    }
 
   }
 
   else{                                   //si el estado es no pulsado
 
-   
-
-      float v = analogRead(2) *0.00488;
-      v_4 = v / (r2 / (r1 + r2));    
+      Serial.print("La trasmision de datos seriales esta deshabilitada.");   
 
   }
-
-// ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION 
-
-  if (20 < v_1 || v_1 < -20) {
-    digitalWrite(LED1, HIGH);
-  }
-  else {
-    digitalWrite(LED1, LOW);
-  }
-
-    if (20 < v_2 || v_2 < -20) {
-    digitalWrite(LED2, HIGH);
-  }
-  else {
-    digitalWrite(LED2, LOW);
-  }
-
-  if (20 < v_3 || v_3 < -20) {
-    digitalWrite(LED3, HIGH);
-  }
-  else {
-    digitalWrite(LED3, LOW);
-  }
-
-  if (20 < v_4 || 4 < -20) {
-    digitalWrite(LED4, HIGH);
-  }
-  else {
-    digitalWrite(LED4, LOW);
-  }
-
-
-
-
-
-
- 
-Serial.print("V1: ");
-Serial.println(interruptor1);
-Serial.print("V2: ");
-Serial.println(interruptor2);
-Serial.print("V3: ");
-Serial.println(interruptor3);
-Serial.print("V4: ");
-Serial.println(interruptor4);
-display.print("V1: ");
-display.setCursor(18,0);
-display.print(v_1);
-display.setCursor(0,8);
-display.println("V2: ");
-display.setCursor(18,8);
-display.println(v_2);
-display.setCursor(0,16);
-display.println("V3: ");
-display.setCursor(18,16);
-display.println(v_3);
-display.setCursor(0,24);
-display.println("V4: ");
-display.setCursor(18,24);
-display.println(v_4);
+delay(500);
 display.display();
-delay(1000);
 display.clearDisplay();
 
 }
