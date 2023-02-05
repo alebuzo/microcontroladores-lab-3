@@ -97,7 +97,7 @@ void loop() {
   else{                                   //si el estado es no pulsado
 
      float v = analogRead(5) *0.00488;
-      v_1 = v / (r2 / (r1 + r2));;   
+      v_1 = v*9.6-24;
       display.print("V1 DC: ");
       display.print(v_1);
       display.print("V");   
@@ -114,7 +114,7 @@ void loop() {
   }
   else{                                   //si el estado es no pulsado
       float v = analogRead(4) *0.00488;
-      v_2 = v / (r2 / (r1 + r2));;     
+      v_2 = v*9.6 -24;
       display.print("\n");
       display.print("V2 DC: ");
       display.print(v_2);
@@ -133,7 +133,7 @@ void loop() {
   }
   else{                                   //si el estado es no pulsado
     float v = analogRead(3) *0.00488;
-      v_3 = v / (r2 / (r1 + r2));; 
+      v_3 = v *9.6 -24;
       display.print("\n");
       display.print("V3 DC: ");
       display.print(v_3);
@@ -153,7 +153,7 @@ void loop() {
 
   else{                                   //si el estado es no pulsado
     float v = analogRead(2) *0.00488;
-      v_4 = v / (r2 / (r1 + r2));;     
+      v_4 = v *9.6-24;     
     display.print("\n");
     display.print("V4 DC: ");
     display.print(v_4);
