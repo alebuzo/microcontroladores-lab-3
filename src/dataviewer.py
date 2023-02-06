@@ -11,10 +11,12 @@ ser = serial.Serial(
     timeout=0\
 )
 
-f= open('/home/alexa/Documents/micro-lab-3/output.csv', 'w+')
+f= open('./output.csv', 'w+')
+f.write('Canal 1, Canal 2, Canal 3, Canal 4\n')
 
 print('Connected to: ' + ser.portstr)
 line = []
+count = 0
 
 while True:
     for c in ser.read():
@@ -23,5 +25,12 @@ while True:
         if c == '\n':
             print("Line: " + ''.join(line))
             str = ''.join(line)
-            f.write(str)
+            str = str[:-2] + ','
+            if(count < 3):
+                f.write(str)
+                count += 1
+            elif(count == 3):
+                f.write(str[:-1]+ "\n")
+                count = 0
             line=[]
+            
