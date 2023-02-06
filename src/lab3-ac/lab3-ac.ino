@@ -219,7 +219,6 @@ void loop() {
     else {
       digitalWrite(LED4, LOW);
     }
-    Serial.println(v);
   }
 
   else{                                   //si el estado es no pulsado
