@@ -84,7 +84,9 @@ void loop() {
   int interruptor2 = digitalRead(11);   //lee el estado del botón
   int interruptor3 = digitalRead(12);   //lee el estado del botón
   int interruptor4 = digitalRead(13);   //lee el estado del botón
-
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
   if(interruptor1==HIGH) {          //si el estado es pulsado
 
     float v_00 = max_v1*0.00488*(1+r1/r2);
@@ -93,16 +95,38 @@ void loop() {
     display.print("V1 AC: ");
     display.print(v_1);
     display.print("V");
+
+  // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION para tension entrada, no rms
+    float v = v_00 +0.7;  
+    if (20 < v || v < -20) {
+      digitalWrite(LED1, HIGH);
+    }
+    else {
+      digitalWrite(LED1, LOW);
+    }
+
   }
   else{                                   //si el estado es no pulsado
 
      float v = analogRead(5) *0.00488;
-      v_1 = v*9.6-24;
+      v_1 = v*9.6-24 + 0.7;
       display.print("V1 DC: ");
       display.print(v_1);
-      display.print("V");   
+      display.print("V");  
+
+    // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION 
+    if (20 < v_1 || v_1 < -20) {
+      digitalWrite(LED1, HIGH);
+    }
+    else {
+      digitalWrite(LED1, LOW);
+    } 
   }
 
+
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
   if(interruptor2==HIGH) {          //si el estado es pulsado
     
      float v_00 = max_v2*0.00488*(1+r1/r2);
@@ -111,17 +135,36 @@ void loop() {
     display.print("V2 AC: ");
     display.print(v_2);
     display.print("V");
+  // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION para tension entrada, no rms
+    float v = v_00 +0.7;  
+    if (20 < v || v < -20) {
+      digitalWrite(LED2, HIGH);
+    }
+    else {
+      digitalWrite(LED2, LOW);
+    }
   }
   else{                                   //si el estado es no pulsado
       float v = analogRead(4) *0.00488;
-      v_2 = v*9.6 -24;
+      v_2 = v*9.6 -24 + 0.7; 
       display.print("\n");
       display.print("V2 DC: ");
       display.print(v_2);
       display.print("V");
+
+   // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION 
+    if (20 < v_2 || v_2 < -20) {
+      digitalWrite(LED2, HIGH);
+    }
+    else {
+      digitalWrite(LED2, LOW);
   }
+   }
 
 
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
   if(interruptor3==HIGH) {          //si el estado es pulsado
 
      float v_00 = max_v3*0.00488*(1+r1/r2);
@@ -130,16 +173,35 @@ void loop() {
     display.print("V3 AC: ");
     display.print(v_3);
     display.print("V");
+  // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION para tension entrada, no rms
+    float v = v_00 +0.7; 
+    if (20 < v || v < -20) {
+      digitalWrite(LED3, HIGH);
+    }
+    else {
+      digitalWrite(LED3, LOW);
+    }
   }
   else{                                   //si el estado es no pulsado
     float v = analogRead(3) *0.00488;
-      v_3 = v *9.6 -24;
+      v_3 = v *9.6 -24+ 0.7;
       display.print("\n");
       display.print("V3 DC: ");
       display.print(v_3);
       display.print("V"); 
+
+     // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION 
+    if (20 < v_3 || v_3 < -20) {
+      digitalWrite(LED3, HIGH);
+    }
+    else {
+      digitalWrite(LED3, LOW);
+       }
   }
 
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
 
   if(interruptor4==HIGH) {          //si el estado es pulsado
 
@@ -149,15 +211,32 @@ void loop() {
       display.print("V4 AC: ");
       display.print(v_4);
       display.print("V");
+  // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION para tension entrada, no rms
+    float v = v_00 +0.7; 
+    if (20 < v || v < -20) {
+      digitalWrite(LED4, HIGH);
+    }
+    else {
+      digitalWrite(LED4, LOW);
+    }
+    Serial.println(v);
   }
 
   else{                                   //si el estado es no pulsado
     float v = analogRead(2) *0.00488;
-      v_4 = v *9.6-24;     
+      v_4 = v *9.6-24 + 0.7;     
     display.print("\n");
     display.print("V4 DC: ");
     display.print(v_4);
     display.print("V");
+
+    // ENCENDIDO DE LEDs DE EMERGENCIA POR LIMITE DE TENSION 
+    if (20 < v_4 || v_4 < -20) {
+      digitalWrite(LED4, HIGH);
+    }
+    else {
+      digitalWrite(LED4, LOW);
+ }
   }
 
 
